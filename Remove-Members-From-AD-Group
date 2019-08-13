@@ -1,0 +1,12 @@
+$ADgroups = import-csv "c:\groups.csv" -Header GroupName
+
+$ADgroups | ForEach-Object { 
+
+    $AllGroups = Get-ADGroup -Identity $_.GroupName
+    echo $AllGroups
+
+    ForEach ($Group in $AllGroups) {
+        Get-ADGroupMember "$Group" | ForEach-Object {Remove-ADGroupMember "$Group" $_ -Confirm:$true}
+    }
+
+}
